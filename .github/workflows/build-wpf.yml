@@ -1,34 +1,22 @@
-name: WpfDh 无限免费构建
-on:
-  push:
-  workflow_dispatch: # 支持网页手动一键运行构建
-
-jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      # 拉取公开仓库 + 授权拉取私有WPF源码子模块
-      - name: 拉取完整源码
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          submodules: true
-
-      # 安装WPF必须的.NET8桌面SDK
-      - name: 安装 .NET 8 桌面运行库
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      # 编译 Release x64 版本WPF程序
-      - name: 编译WPF项目
-        run: |
-          cd src
-          msbuild *.sln /p:Configuration=Release /p:Platform="x64"
-
-      # 上传编译好的EXE，可直接下载
-      - name: 上传编译产物
-        uses: actions/upload-artifact@v4
-        with:
-          name: WpfDh-Release-编译包
-          path: src/**/bin/Release/
+name: Build WPF Project
+ on:
+   push:
+     branches: [ main ]
+   pull_request:
+     branches: [ main ]
+ jobs:
+   build:
+     runs-on: windows-latest
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v4
+       - name: Setup .NET 8 SDK
+         uses: actions/setup-dotnet@v4
+         with:
+           dotnet-version: 8.0.x
+       - name: Restore NuGet packages
+         run: dotnet restore src/WpfDhDemo/WpfDhDemo.csproj
+       - name: Build WPF Project
+         run: dotnet build src/WpfDhDemo/WpfDhDemo.csproj -c Release --no-restore
+       - name: Publish artifact
+         run: dotnet publish src/WpfDhDemo/WpfDhDemo.csproj -c Release --no-build
