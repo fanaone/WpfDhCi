@@ -9,8 +9,11 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
+      - name: Checkout code (包含子模块)
         uses: actions/checkout@v4
+        with:
+          submodules: true  # 关键：强制拉取子模块代码
+          recursive: true   # 递归拉取嵌套子模块
 
       - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
