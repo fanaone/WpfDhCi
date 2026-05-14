@@ -12,7 +12,6 @@ jobs:
       - name: Checkout main repo
         uses: actions/checkout@v4
 
-      # 克隆私有子仓库，复用当前TOKEN授权
       - name: Clone WpfDhSrc to src folder
         uses: actions/checkout@v4
         with:
@@ -34,8 +33,9 @@ jobs:
       - name: Publish WPF App
         run: dotnet publish ./src/WpfDhDemo/WpfDhDemo.csproj -c Release --runtime win-x64 -p:PublishSingleFile=true -p:SelfContained=false
 
+      # 关键修复：非自包含单文件，exe在publish的上一级！
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: WpfDhDemo-win-x64
-          path: ./src/WpfDhDemo/bin/Release/net9.0-windows/win-x64/publish/
+          path: ./src/WpfDhDemo/bin/Release/net9.0-windows/win-x64/
