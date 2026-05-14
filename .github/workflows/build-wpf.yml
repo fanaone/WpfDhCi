@@ -1,22 +1,24 @@
-name: Build WPF Project
- on:
-   push:
-     branches: [ main ]
-   pull_request:
-     branches: [ main ]
- jobs:
-   build:
-     runs-on: windows-latest
-     steps:
-       - name: Checkout code
-         uses: actions/checkout@v4
-       - name: Setup .NET 8 SDK
-         uses: actions/setup-dotnet@v4
-         with:
-           dotnet-version: 8.0.x
-       - name: Restore NuGet packages
-         run: dotnet restore src/WpfDhDemo/WpfDhDemo.csproj
-       - name: Build WPF Project
-         run: dotnet build src/WpfDhDemo/WpfDhDemo.csproj -c Release --no-restore
-       - name: Publish artifact
-         run: dotnet publish src/WpfDhDemo/WpfDhDemo.csproj -c Release --no-build
+name: Build WPF Project0
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --configuration Release
