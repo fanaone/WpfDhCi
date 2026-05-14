@@ -30,3 +30,12 @@ jobs:
 
       - name: Build project
         run: dotnet build ./src/WpfDhDemo/WpfDhDemo.csproj --configuration Release
+
+      - name: Publish WPF App
+        run: dotnet publish ./src/WpfDhDemo/WpfDhDemo.csproj --configuration Release --self-contained true --runtime win-x64 -p:PublishSingleFile=true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WpfDhDemo-win-x64
+          path: ./src/WpfDhDemo/bin/Release/net8.0-windows/win-x64/publish/
