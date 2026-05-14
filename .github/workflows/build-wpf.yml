@@ -1,4 +1,4 @@
-name: Build WPF Project0
+name: Build WPF Project
 on:
   push:
     branches: [main]
@@ -18,7 +18,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./src/WpfDhDemo/WpfDhDemo.csproj
 
       - name: Build project
-        run: dotnet build --configuration Release
+        run: dotnet build ./src/WpfDhDemo/WpfDhDemo.csproj --configuration Release
