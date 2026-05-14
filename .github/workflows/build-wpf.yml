@@ -12,9 +12,13 @@ jobs:
       - name: Checkout main repo
         uses: actions/checkout@v4
 
-      # 手动克隆你的子模块仓库到 src 目录
-      - name: Clone submodule repo
-        run: git clone https://github.com/fanaone/WpfDhSrc.git ./src
+      # 克隆私有子仓库，复用当前TOKEN授权
+      - name: Clone WpfDhSrc to src folder
+        uses: actions/checkout@v4
+        with:
+          repository: fanaone/WpfDhSrc
+          path: src
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
